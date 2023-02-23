@@ -1,0 +1,10 @@
+df['pre_process'] = df['text'].apply(lambda x: " ".join(x.lower() for x in str(x).split()))
+df['pre_process']=df['pre_process'].apply(lambda x: BeautifulSoup(x).get_text())
+df['pre_process']=df['pre_process'].apply(lambda x: re.sub(r"http\S+", "", x))
+df['pre_process']=df['pre_process'].apply(lambda x: " ".join([re.sub('[^A-Za-z]+','', x) for x in nltk.word_tokenize(x)]))
+df['pre_process']=df['pre_process'].apply(lambda x: re.sub(' +', ' ', x))
+stop = stopwords.words('english')
+df['pre_process']=df['pre_process'].apply(lambda x: " ".join([x for x in x.split() if x not in stop]))
+lemmatizer = WordNetLemmatizer()
+df['pre_process']=df['pre_process'].apply(lambda x: " ".join([lemmatizer.lemmatize(w) for w in nltk.word_tokenize(x)]))
+df
